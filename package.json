@@ -74,7 +74,7 @@
     "isparta": "^4.0.0",
     "json-loader": "^0.5.3",
     "mocha": "^2.3.4",
-    "semantic-release": "^4.3.5",
+    "semantic-release": "^6.3.2",
     "@semantic-release/commit-analyzer": "github:artemv/commit-analyzer#414c9e8168518e00d5fd2bd0d653867404c994cb",
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0",
