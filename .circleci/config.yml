@@ -1,8 +1,12 @@
 version: 2
+
+common: &common
+  docker:
+    - image: circleci/node:10
+
 jobs:
   test:
-    docker:
-      - image: circleci/node:10
+    <<: *common
     steps:
       - checkout
       - restore_cache:
