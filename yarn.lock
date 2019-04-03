@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@bahmutov/parse-github-repo-url@^0.1.1":
+"@bahmutov/parse-github-repo-url@^0.1.2":
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/@bahmutov/parse-github-repo-url/-/parse-github-repo-url-0.1.2.tgz#6311dfbe7fe00ac464b9069d0e2684a739aeb69b"
   integrity sha1-YxHfvn/gCsRkuQadDiaEpzmutps=
@@ -50,7 +50,7 @@
     once "^1.4.0"
     universal-user-agent "^2.0.1"
 
-"@octokit/rest@^16.13.1":
+"@octokit/rest@^16.13.1", "@octokit/rest@^16.23.2":
   version "16.23.2"
   resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-16.23.2.tgz#975e84610427c4ab6c41bec77c24aed9b7563db4"
   integrity sha512-ZxiZMaCuqBG/IsbgNRVfGwYsvBb5DjHuMGjJgOrinT+/b+1j1U7PiGyRkHDJdjTGA6N/PsMC2lP2ZybX9579iA==
@@ -3255,11 +3255,6 @@ git-log-parser@^1.2.0:
     stream-combiner2 "~1.1.1"
     through2 "~2.0.0"
     traverse "~0.6.6"
-
-github@^14.0.0:
-  version "14.0.0"
-  resolved "https://registry.yarnpkg.com/github/-/github-14.0.0.tgz#b707ed88c33cd05e155c785d289aa6229c59a850"
-  integrity sha512-34/VqwhYGeYN0VHBSH49TmRWMF7emy32qjK6POiW47T/QI2u/cpuKsmrWt7a218ew/73dF4dQSJE68/HXdNfPw==
 
 glob-base@^0.3.0:
   version "0.3.0"
@@ -7370,9 +7365,9 @@ simple-is@~0.2.0:
   resolved "https://registry.yarnpkg.com/simple-is/-/simple-is-0.2.0.tgz#2abb75aade39deb5cc815ce10e6191164850baf0"
   integrity sha1-Krt1qt453rXMgVzhDmGRFkhQuvA=
 
-simple-semantic-config@egis/simple-semantic-config:
-  version "6.0.4"
-  resolved "https://codeload.github.com/egis/simple-semantic-config/tar.gz/500d0c3ea48728f770d12a52a1e05df4653fe34f"
+simple-semantic-config@egis/simple-semantic-config#86a1cde:
+  version "6.0.5"
+  resolved "https://codeload.github.com/egis/simple-semantic-config/tar.gz/86a1cde048201c6d8a96ca3d4d2413e3253c74c6"
   dependencies:
     semantic-release "^15.13.3"
 

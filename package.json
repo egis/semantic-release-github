@@ -40,9 +40,9 @@
   },
   "homepage": "https://github.com/egis/semantic-dependents-updates-github",
   "dependencies": {
-    "@bahmutov/parse-github-repo-url": "^0.1.1",
-    "babel-polyfill": "^6.3.14",
-    "github": "^14.0.0"
+    "@bahmutov/parse-github-repo-url": "^0.1.2",
+    "@octokit/rest": "^16.23.2",
+    "babel-polyfill": "^6.3.14"
   },
   "devDependencies": {
     "babel-core": "^6.7.4",
@@ -71,7 +71,7 @@
     "isparta": "^4.0.0",
     "json-loader": "^0.5.3",
     "mocha": "^2.3.4",
-    "simple-semantic-config": "egis/simple-semantic-config",
+    "simple-semantic-config": "egis/simple-semantic-config#86a1cde",
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0",
     "vinyl-source-stream": "^1.1.0"
