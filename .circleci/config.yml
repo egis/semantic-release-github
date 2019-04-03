@@ -1,0 +1,56 @@
+version: 2
+jobs:
+  test:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: install-deps
+          command: |
+            yarn --frozen-lockfile
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+            - ~/.cache/yarn
+      - run:
+          name: post-deps
+          command: |
+            mkdir ci-artifacts
+            cp yarn.lock ci-artifacts/
+            yarn build
+          when: always
+      - run: yarn test
+      - run:
+          name: post-test
+          command: |
+      - store_artifacts:
+          path: ci-artifacts/
+
+  publish:
+    <<: *common
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: publish
+          command: |
+            cp .circleci/.npmrc .
+            OWNER=egis yarn simple-semantic-release
+
+workflows:
+  version: 2
+  main:
+    jobs:
+      - test
+      - deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
+          context: org-global
