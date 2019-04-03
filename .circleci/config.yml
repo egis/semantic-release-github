@@ -28,9 +28,6 @@ jobs:
             yarn build
           when: always
       - run: yarn test
-      - run:
-          name: post-test
-          command: |
       - store_artifacts:
           path: ci-artifacts/
 
