@@ -15,12 +15,10 @@
     "lint": "gulp lint",
     "watch": "gulp watch",
     "build": "gulp build",
-    "coverage": "gulp coverage",
-    "semantic-release": "semantic-release pre && npm publish --access public && semantic-release post"
+    "coverage": "gulp coverage"
   },
   "release": {
-    "verifyConditions": "condition-circle",
-    "analyzeCommits": "./node_modules/@semantic-release/commit-analyzer/dist/index.js"
+    "extends": "simple-semantic-config"
   },
   "repository": {
     "type": "git",
@@ -42,9 +40,9 @@
   },
   "homepage": "https://github.com/egis/semantic-dependents-updates-github",
   "dependencies": {
-    "@bahmutov/parse-github-repo-url": "^0.1.1",
-    "babel-polyfill": "^6.3.14",
-    "github": "^2.5.2"
+    "@bahmutov/parse-github-repo-url": "^0.1.2",
+    "@octokit/rest": "^16.23.2",
+    "babel-polyfill": "^6.3.14"
   },
   "devDependencies": {
     "babel-core": "^6.7.4",
@@ -63,7 +61,6 @@
     "gulp-insert": "^0.5.0",
     "gulp-istanbul": "^0.10.3",
     "gulp-jscs": "^3.0.0",
-    "gulp-livereload": "^3.8.1",
     "gulp-load-plugins": "^1.1.0",
     "gulp-mocha": "^2.2.0",
     "gulp-plumber": "^1.0.1",
@@ -74,14 +71,9 @@
     "isparta": "^4.0.0",
     "json-loader": "^0.5.3",
     "mocha": "^2.3.4",
-    "semantic-release": "^4.3.5",
-    "@semantic-release/commit-analyzer": "github:artemv/commit-analyzer#414c9e8168518e00d5fd2bd0d653867404c994cb",
+    "simple-semantic-config": "egis/simple-semantic-config#86a1cde",
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0",
     "vinyl-source-stream": "^1.1.0"
-  },
-  "engines": {
-    "node": ">=0.10",
-    "npm": ">=2"
   }
 }

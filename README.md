@@ -57,20 +57,17 @@ print it if you choose 'Other' CI instead of Travis.
   ...
 ```
 Here we tell semantic-dependents-updates-github to create pull requests to change build-tools' version to "1.2.3" in
-GitHub repos of "@egis/egis-ui", "@egis/esign" and "@egis/portal-app" packages. In case of semantic-release the version
-will be the one that was just published.
+GitHub repos of "@egis/egis-ui", "@egis/esign" and "@egis/portal-app" packages.
 
-* Use the 'semantic-dependents-updates-github' binary script in package.json' scripts section - this will create the
+* Use the 'semantic-dependents-updates-github' binary script in package.json' scripts section - this will create the 
 PRs. Example for integration with semantic-release:
 ```
-  ...
-  "scripts": {
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post && semantic-dependents-updates-github",
-  },
-  ...
-
+yarn semantic-release && yarn semantic-dependents-updates-github
 ```
-
+The PR generation can be switched off - then only branch will be created and relevant commit will be pushed:
+```
+PR=false yarn semantic-dependents-updates-github
+```
 ## Configuration
 
 The module config section in package.json can have following options, all of which are optional except "dependents". Example:
@@ -87,7 +84,8 @@ The module config section in package.json can have following options, all of whi
     "author": {
       name: "semantic-dependents-updates-github bot",
       email: "semadep@nowhere.io"
-    }
+    },
+    "pullRequests": false
   },
   ...
 ```
@@ -98,7 +96,7 @@ The module config section in package.json can have following options, all of whi
 
 ## License
 
-MIT License 2016 © Artem Vasiliev
+MIT License 2019 © Artem Vasiliev
 
 
 [nodei.co]: https://nodei.co/npm/@egis/semantic-dependents-updates-github.png

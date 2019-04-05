@@ -1,9 +1,8 @@
 import * as fs from 'fs';
-import * as github from 'github';
+import GitHubApi from '@octokit/rest';
 import * as parseGithubUrl from '@bahmutov/parse-github-repo-url';
 
 let env = process.env;
-const GitHubApi = github.default;
 const parseSlug = parseGithubUrl.default;
 
 const PACKAGE_JSON = 'package.json';
@@ -14,12 +13,9 @@ export default class DependentsUpdater {
     let pkg = JSON.parse(fs.readFileSync('./package.json'));
     this.packageName = pkg.name;
     this.packageVersion = pkg.version;
-    this.config = pkg['semantic-dependents-updates'];
+    this.config = Object.assign({pullRequests: true}, pkg['semantic-dependents-updates']);
     this.deps = this.config.dependents;
     this.ghToken = env[GH_TOKEN_KEY] || env.GITHUB_TOKEN;
-    this.githubApi = new GitHubApi({
-      version: '3.0.0'
-    });
   }
 
   update() {
@@ -45,63 +41,51 @@ export default class DependentsUpdater {
     let msgWithFile = Object.assign({
       content: new Buffer(rawPkg).toString('base64')
     }, msg);
-    return new Promise((resolve) => {
-      this.githubApi.repos.updateFile(msgWithFile, (err, data) => {
-        if (err) {
-          throw new Error(`Couldn't commit a change  ${JSON.stringify(msg)} for ${config.targetPackageName}: ${err}`);
-        }
-        config.updateCommitSha = data.commit.sha;
-        resolve();
+    return this.githubApi.repos.updateFile(msgWithFile)
+      .then((res) => config.updateCommitSha = res.data.commit.sha)
+      .catch((err) => {
+        throw new Error(`Couldn't commit a change  ${JSON.stringify(msg)} for ${config.targetPackageName}: ${err}`);
       });
-    });
   }
 
   createPullRequest(config) {
     let msg = Object.assign(this.gitRepoOptions(config), {
       title: `Update ${this.packageName} to version ${this.packageVersion}`,
       base: config.branch,
-      head: config.updateCommitSha
+      head: config.newBranch,
+      body: '🚀'
     });
-    return new Promise((resolve) => {
-      this.githubApi.pullRequests.create(msg, (err, data) => {
-        if (err) {
-          throw new Error(`Couldn't create a PR for ${config.targetPackageName}: ${err}`);
-        }
-        resolve();
+
+    return this.githubApi.pulls.create(msg)
+      .catch((err) => {
+        throw new Error(`Couldn't create a PR for ${config.targetPackageName}: ${JSON.stringify(err.errors)}`);
       });
-    });
   }
 
   getCurrentHead(config) {
     let msg = Object.assign(this.gitRepoOptions(config), {branch: config.branch});
-    return new Promise((resolve) => {
-      this.githubApi.repos.getBranch(msg, (err, data) => {
-        if (err) {
-          throw new Error(`Couldn't get current head of ${config.targetPackageName}: ${err}`);
-        }
-        resolve(data.commit.sha);
+    return this.githubApi.repos.getBranch(msg)
+      .then((res) => res.data.commit.sha)
+      .catch((err) => {
+        throw new Error(`Couldn't get current head of ${config.targetPackageName}: ${err}`);
       });
-    });
   }
 
   createBranch(config) {
-    let random = `${Date.now()}`;
-    config.newBranch = `${this.config.branchNameBase || 'autoupdate'}-${this.packageVersion}-${random}`;
-    return new Promise((resolve) => {
-      this.getCurrentHead(config).then((sha) => {
+    let ts = `${Date.now()}`;
+    config.newBranch = `${this.config.branchNameBase || 'autoupdate'}-${this.packageVersion}-${ts}`;
+    return this.getCurrentHead(config)
+      .then((sha) => {
         let msg = Object.assign(this.gitRepoOptions(config), {
           ref: `refs/heads/${config.newBranch}`,
           sha: sha
         });
 
-        this.githubApi.gitdata.createReference(msg, (err, data) => {
-          if (err) {
+        return this.githubApi.gitdata.createRef(msg)
+          .catch((err) => {
             throw new Error(`Couldn't create a new branch for ${config.targetPackageName} from sha ${sha}: ${err}`);
-          }
-          resolve();
-        });
+          });
       });
-    });
   }
 
   processTargetPackageJson(rawPkg, config) {
@@ -123,7 +107,9 @@ export default class DependentsUpdater {
       this.createBranch(config).then(() => {
         return this.updateFileInBranch(rawPkg, config);
       }).then(() => {
-        this.createPullRequest(config).then(() => console.log(`Created a PR for ${config.targetPackageName}`));
+        if (this.config.pullRequests) {
+          this.createPullRequest(config).then(() => console.log(`Created a PR for ${config.targetPackageName}`));
+        }
       });
     } else {
       console.log(`Package ${config.targetPackageName} already have ${this.packageName} at version ${this.packageVersion}`);
@@ -133,24 +119,20 @@ export default class DependentsUpdater {
 
   gitRepoOptions(config) {
     return {
-      user: config.gitRepoOwner,
+      owner: config.gitRepoOwner,
       repo: config.gitRepo
     };
   }
 
   getTargetPackageJson(options, config) {
-    return new Promise((resolve) => {
-      this.githubApi.repos.getContent(Object.assign(this.gitRepoOptions(config), {
+    return this.githubApi.repos.getContents(Object.assign(this.gitRepoOptions(config), {
             ref: config.branch,
             path: PACKAGE_JSON
-          }, options), (err, data) => {
-            if (err) {
-              throw new Error(`Couldn't get ${PACKAGE_JSON} of ${config.targetPackageName}: ${err}`);
-            }
-            resolve(data);
-          }
-      );
-    });
+          }, options))
+      .then((res) => res.data)
+      .catch((err) => {
+        throw new Error(`Couldn't get ${PACKAGE_JSON} of ${config.targetPackageName}: ${err}`);
+      });
   }
 
   updateDependency(dep, gitUrl) {
@@ -174,9 +156,8 @@ export default class DependentsUpdater {
     if (!this.ghToken) {
       throw `You need to set the ${GH_TOKEN_KEY} env variable`;
     }
-    this.githubApi.authenticate({
-      token: this.ghToken,
-      type: 'oauth'
+    this.githubApi = new GitHubApi({
+      auth: this.ghToken
     });
   }
 
