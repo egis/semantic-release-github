@@ -101,4 +101,3 @@ MIT License 2019 © Artem Vasiliev
 
 [nodei.co]: https://nodei.co/npm/@egis/semantic-dependents-updates-github.png
 [npm-url]: https://npmjs.org/package/@egis/semantic-dependents-updates-github
-
