@@ -71,7 +71,7 @@
     "isparta": "^4.0.0",
     "json-loader": "^0.5.3",
     "mocha": "^2.3.4",
-    "simple-semantic-config": "egis/simple-semantic-config#86a1cde",
+    "simple-semantic-config": "^6.0.13",
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0",
     "vinyl-source-stream": "^1.1.0"

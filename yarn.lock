@@ -7377,9 +7377,10 @@ simple-is@~0.2.0:
   resolved "https://registry.yarnpkg.com/simple-is/-/simple-is-0.2.0.tgz#2abb75aade39deb5cc815ce10e6191164850baf0"
   integrity sha1-Krt1qt453rXMgVzhDmGRFkhQuvA=
 
-simple-semantic-config@egis/simple-semantic-config#86a1cde:
-  version "6.0.5"
-  resolved "https://codeload.github.com/egis/simple-semantic-config/tar.gz/86a1cde048201c6d8a96ca3d4d2413e3253c74c6"
+simple-semantic-config@^6.0.13:
+  version "6.0.13"
+  resolved "https://registry.yarnpkg.com/simple-semantic-config/-/simple-semantic-config-6.0.13.tgz#890a0321e01358ec71c7350e369bf7083345d91b"
+  integrity sha512-fv1n+8v6cEhLag9VEhVOdoVmNIYY4JhRym6yUGKBqs/sFc3bksxgHKq3FrogZZ78IoelCzrMLm/XXuLoqJPXUQ==
   dependencies:
     semantic-release "^15.13.3"
 
