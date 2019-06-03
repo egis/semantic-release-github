@@ -48,7 +48,7 @@ workflows:
   main:
     jobs:
       - test
-      - deploy:
+      - publish:
           requires:
             - test
           filters:
