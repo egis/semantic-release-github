@@ -41,14 +41,14 @@ jobs:
           name: publish
           command: |
             cp .circleci/.npmrc .
-            if [[ "${CIRCLE_PROJECT_USERNAME}"="egis" ]]; then yarn semantic-release; fi
+            if [[ "${CIRCLE_PROJECT_USERNAME}" == "egis" ]]; then yarn semantic-release; fi
 
 workflows:
   version: 2
   main:
     jobs:
       - test
-      - deploy:
+      - publish:
           requires:
             - test
           filters:
